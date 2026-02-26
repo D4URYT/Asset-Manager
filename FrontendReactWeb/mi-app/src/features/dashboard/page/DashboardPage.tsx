@@ -20,12 +20,10 @@ import { UsersTableSection }   from "../sections/UsersTableSection";
 export default function DashboardPage() {
   const {
     search,
-    activeNav,
     toastVisible,
     toastMsg,
     filteredProducts,
     setSearch,
-    setActiveNav,
     showToast,
   } = useDashboard();
 
@@ -43,11 +41,7 @@ export default function DashboardPage() {
       <style>{globalStyles(t)}</style>
 
       {/* ── Sidebar ── */}
-      <Sidebar
-        navItems={NAV_ITEMS}
-        activeNav={activeNav}
-        onNavChange={setActiveNav}
-      />
+      <Sidebar navItems={NAV_ITEMS} />
 
       {/* ── Main Content ── */}
       <main style={{ flex: 1, overflow: "auto", padding: "32px" }}>

@@ -70,12 +70,13 @@ export interface NavItemData {
   id: string;
   Icon: LucideIcon;
   label: string;
+  href: string;
 }
 
 export const NAV_ITEMS: NavItemData[] = [
-  { id: "dashboard", Icon: LayoutDashboard, label: "Dashboard"     },
-  { id: "productos", Icon: Package,         label: "Productos"     },
-  { id: "facturas",  Icon: FileText,        label: "Facturas"      },
-  { id: "reportes",  Icon: BarChart2,       label: "Reportes"      },
-  { id: "config",    Icon: Settings,        label: "Configuración" },
-];  
+  { id: "dashboard", Icon: LayoutDashboard, label: "Dashboard",     href: "/dashboard"  },
+  { id: "productos", Icon: Package,         label: "Productos",     href: "/product"  },
+  { id: "facturas",  Icon: FileText,        label: "Facturas",      href: "/facturas"   },
+  { id: "reportes",  Icon: BarChart2,       label: "Reportes",      href: "/reportes"   },
+  { id: "config",    Icon: Settings,        label: "Configuración", href: "/config"     },
+];

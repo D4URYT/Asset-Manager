@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { DashboardPage } from "@/features/dashboard/index"; // ✅ limpio, sin rutas internas
+import { DashboardPage } from "@/features/dashboard";
 
 export const metadata: Metadata = {
   title: "Dashboard vendedor",

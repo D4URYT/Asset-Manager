@@ -31,7 +31,6 @@ class AuthApiController(http.Controller):
             'login': login,
             'password': password,
             'email': email,
-            'address': address,
         }
         user = user_model.create(user_vals)
 

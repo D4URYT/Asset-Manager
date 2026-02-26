@@ -1,26 +1,60 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Brand */
+  --brand-600: #1e3a8a;
+  --brand-700: #1a2f73;
+  --brand-400: #3b82f6;
+  --brand-100: #dbeafe;
+
+  /* Backgrounds */
+  --bg-main: #f8fafc;
+  --bg-card: #ffffff;
+  --bg-alt: #f1f5f9;
+
+  /* Text */
+  --text-primary: #1f2937;
+  --text-secondary: #4b5563;
+  --text-disabled: #9ca3af;
+
+  /* States */
+  --success-500: #10b981;
+  --success-100: #d1fae5;
+  --error-500: #ef4444;
+  --error-100: #fee2e2;
+  --warning-500: #f59e0b;
+  --warning-100: #fef3c7;
+
+  /* Dashboard metrics */
+  --chart-sales: #3b82f6;
+  --chart-payments: #10b981;
+  --chart-pending: #f59e0b;
+  --chart-overdue: #ef4444;
+
+  /* Typography scale */
+  --fs-h1: 1.75rem;
+  --fs-h2: 1.25rem;
+  --fs-subtitle: 1rem;
+  --fs-body: 0.95rem;
+  --fs-small: 0.78rem;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html,
+body {
+  height: 100%;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--bg-main);
+  color: var(--text-primary);
+  font-family: var(--font-sans), "Segoe UI", sans-serif;
+  -webkit-font-smoothing: antialiased;
 }

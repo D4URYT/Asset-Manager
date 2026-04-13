@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <record id="view_proyect_app_user_list" model="ir.ui.view">
-        <field name="name">proyect.app.user.list</field>
-        <field name="model">proyect.app.user</field>
+    <record id="view_billnova_user_list" model="ir.ui.view">
+        <field name="name">billnova.user.list</field>
+        <field name="model">billnova.user</field>
         <field name="arch" type="xml">
             <list string="Usuarios App">
                 <field name="name"/>
@@ -14,9 +14,9 @@
         </field>
     </record>
 
-    <record id="view_proyect_app_user_form" model="ir.ui.view">
-        <field name="name">proyect.app.user.form</field>
-        <field name="model">proyect.app.user</field>
+    <record id="view_billnova_user_form" model="ir.ui.view">
+        <field name="name">billnova.user.form</field>
+        <field name="model">billnova.user</field>
         <field name="arch" type="xml">
             <form string="Usuario App">
                 <sheet>
@@ -32,12 +32,12 @@
         </field>
     </record>
 
-    <record id="action_proyect_app_user" model="ir.actions.act_window">
+    <record id="action_billnova_user" model="ir.actions.act_window">
         <field name="name">Usuarios</field>
-        <field name="res_model">proyect.app.user</field>
+        <field name="res_model">billnova.user</field>
         <field name="view_mode">list,form</field>
     </record>
 
-    <menuitem id="menu_proyect_root" name="Proyect" sequence="10"/>
-    <menuitem id="menu_proyect_users" name="Usuarios" parent="menu_proyect_root" action="action_proyect_app_user" sequence="20"/>
+    <menuitem id="menu_proyect_root" name="BillNova" sequence="10"/>
+    <menuitem id="menu_proyect_users" name="Usuarios" parent="menu_proyect_root" action="action_billnova_user" sequence="20"/>
 </odoo>

@@ -1,0 +1,185 @@
+import {
+  Package,
+  AlertTriangle,
+  XCircle,
+  Tag,
+  type LucideIcon,
+} from "lucide-react";
+import { Producto, ProductoStatCard } from "../types/productos.types";
+import { productosTheme as t } from "../theme/productos.theme";
+
+export const PRODUCTOS_DATA: Producto[] = [
+  {
+    id: "PRD-001",
+    nombre: 'Laptop Pro 15"',
+    sku: "LAP-PRO-15-001",
+    categoria: "Electrónica",
+    stock: 24,
+    stockStatus: "ok",
+    precio: 1299.0,
+    costo: 950.0,
+    proveedor: "TechDistrib S.A.",
+    ultimaActualizacion: "15 Ene 2025",
+  },
+  {
+    id: "PRD-002",
+    nombre: "Monitor 4K UltraWide",
+    sku: "MON-4K-UW-002",
+    categoria: "Electrónica",
+    stock: 6,
+    stockStatus: "bajo",
+    precio: 549.0,
+    costo: 380.0,
+    proveedor: "DisplayTech Co.",
+    ultimaActualizacion: "16 Ene 2025",
+  },
+  {
+    id: "PRD-003",
+    nombre: "Teclado Mecánico RGB",
+    sku: "TEC-MEC-RGB-003",
+    categoria: "Periféricos",
+    stock: 0,
+    stockStatus: "agotado",
+    precio: 189.0,
+    costo: 110.0,
+    proveedor: "KeyMaster Ltd.",
+    ultimaActualizacion: "10 Ene 2025",
+  },
+  {
+    id: "PRD-004",
+    nombre: "Silla Ergonómica Plus",
+    sku: "SIL-ERG-PLUS-004",
+    categoria: "Mobiliario",
+    stock: 12,
+    stockStatus: "ok",
+    precio: 399.0,
+    costo: 260.0,
+    proveedor: "OfficeComfort S.L.",
+    ultimaActualizacion: "17 Ene 2025",
+  },
+  {
+    id: "PRD-005",
+    nombre: "Auriculares Noise Cancel",
+    sku: "AUR-NC-500-005",
+    categoria: "Audio",
+    stock: 3,
+    stockStatus: "bajo",
+    precio: 299.0,
+    costo: 190.0,
+    proveedor: "SoundPro Inc.",
+    ultimaActualizacion: "18 Ene 2025",
+  },
+  {
+    id: "PRD-006",
+    nombre: "Webcam HD 1080p",
+    sku: "CAM-HD-1080-006",
+    categoria: "Periféricos",
+    stock: 31,
+    stockStatus: "ok",
+    precio: 129.0,
+    costo: 75.0,
+    proveedor: "VisionTech S.A.",
+    ultimaActualizacion: "18 Ene 2025",
+  },
+  {
+    id: "PRD-007",
+    nombre: "Hub USB-C 7 puertos",
+    sku: "HUB-USBC-7-007",
+    categoria: "Accesorios",
+    stock: 18,
+    stockStatus: "ok",
+    precio: 59.0,
+    costo: 32.0,
+    proveedor: "ConnectAll Ltd.",
+    ultimaActualizacion: "19 Ene 2025",
+  },
+  {
+    id: "PRD-008",
+    nombre: "Mouse Inalámbrico Pro",
+    sku: "MOU-INL-PRO-008",
+    categoria: "Periféricos",
+    stock: 5,
+    stockStatus: "bajo",
+    precio: 89.0,
+    costo: 50.0,
+    proveedor: "KeyMaster Ltd.",
+    ultimaActualizacion: "20 Ene 2025",
+  },
+  {
+    id: "PRD-009",
+    nombre: "Altavoz Bluetooth 360",
+    sku: "ALT-BT-360-009",
+    categoria: "Audio",
+    stock: 0,
+    stockStatus: "agotado",
+    precio: 149.0,
+    costo: 88.0,
+    proveedor: "SoundPro Inc.",
+    ultimaActualizacion: "12 Ene 2025",
+  },
+  {
+    id: "PRD-010",
+    nombre: "Soporte Monitor Dual",
+    sku: "SOP-MON-DUAL-010",
+    categoria: "Accesorios",
+    stock: 9,
+    stockStatus: "ok",
+    precio: 79.0,
+    costo: 44.0,
+    proveedor: "OfficeComfort S.L.",
+    ultimaActualizacion: "21 Ene 2025",
+  },
+];
+
+export const CATEGORIAS = [
+  "Todas",
+  "Electrónica",
+  "Periféricos",
+  "Audio",
+  "Mobiliario",
+  "Accesorios",
+] as const;
+
+export interface ProductoStatCardDef {
+  label: string;
+  value: string;
+  Icon: LucideIcon;
+  delta: string;
+  color: string;
+  bg: string;
+}
+
+export const PRODUCTO_STATS: ProductoStatCardDef[] = [
+  {
+    label: "Total Productos",
+    value: "248",
+    Icon: Package,
+    delta: "+12 este mes",
+    color: t.brand400,
+    bg: t.brand100,
+  },
+  {
+    label: "Stock Bajo",
+    value: "3",
+    Icon: AlertTriangle,
+    delta: "Requieren reorden",
+    color: t.warning,
+    bg: t.warningBg,
+  },
+  {
+    label: "Agotados",
+    value: "2",
+    Icon: XCircle,
+    delta: "Sin existencias",
+    color: t.error,
+    bg: t.errorBg,
+  },
+  {
+    label: "Categorías",
+    value: "5",
+    Icon: Tag,
+    delta: "Activas",
+    color: t.success,
+    bg: t.successBg,
+  },
+];

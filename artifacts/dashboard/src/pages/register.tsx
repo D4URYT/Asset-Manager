@@ -1,15 +1,14 @@
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRegister } from "@workspace/api-client-react";
 import { useAuth } from "@/hooks/use-auth";
+import { supabase } from "@/lib/supabase";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import { toast } from "sonner";
-import { Spinner } from "@/components/ui/spinner";
 
 const registerSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
@@ -21,7 +20,7 @@ type RegisterFormValues = z.infer<typeof registerSchema>;
 
 export default function RegisterPage() {
   const { login: authenticate } = useAuth();
-  const register = useRegister();
+  const [, setLocation] = useLocation();
   
   const form = useForm<RegisterFormValues>({
     resolver: zodResolver(registerSchema),
@@ -32,16 +31,48 @@ export default function RegisterPage() {
     },
   });
 
-  const onSubmit = (values: RegisterFormValues) => {
-    register.mutate({ data: { ...values, role: "user" } }, {
-      onSuccess: (data) => {
-        toast.success("Account created successfully");
-        authenticate(data.token);
-      },
-      onError: (error) => {
-        toast.error(error.message || "Failed to create account");
-      }
+  const onSubmit = async (values: RegisterFormValues) => {
+    console.info("[register] Submitting signup request", {
+      email: values.email,
+      name: values.name,
     });
+    try {
+      const { data, error } = await supabase.auth.signUp({
+        email: values.email,
+        password: values.password,
+        options: {
+          data: {
+            name: values.name,
+            role: "user",
+          },
+        },
+      });
+
+      if (error) {
+        console.error("[register] Signup failed", error);
+        toast.error(error.message || "No se pudo crear la cuenta");
+        return;
+      }
+
+      console.info("[register] Signup completed successfully", {
+        userId: data.user?.id ?? null,
+        email: data.user?.email ?? null,
+        hasSession: Boolean(data.session),
+      });
+
+      if (data.session) {
+        toast.success("Cuenta creada correctamente. Entrando al dashboard...");
+        authenticate(data.session);
+        setLocation("/");
+        return;
+      }
+
+      toast.success("Cuenta creada correctamente. Revisa tu correo para confirmar la cuenta.");
+      setLocation("/login");
+    } catch (error) {
+      console.error("[register] Unexpected signup error", error);
+      toast.error("Ocurrio un error inesperado al crear la cuenta");
+    }
   };
 
   return (
@@ -93,9 +124,8 @@ export default function RegisterPage() {
                   </FormItem>
                 )}
               />
-              <Button type="submit" className="w-full" disabled={register.isPending} data-testid="btn-register-submit">
-                {register.isPending ? <Spinner className="mr-2 h-4 w-4" /> : null}
-                Sign up
+              <Button type="submit" className="w-full" disabled={form.formState.isSubmitting} data-testid="btn-register-submit">
+                {form.formState.isSubmitting ? "Creando cuenta..." : "Sign up"}
               </Button>
             </form>
           </Form>

@@ -1,6 +1,9 @@
+import { loadRootEnvFile } from "./lib/env";
 import app from "./app";
 import { logger } from "./lib/logger";
 import { seedIfEmpty } from "./lib/seed";
+
+loadRootEnvFile();
 
 const rawPort = process.env["PORT"];
 

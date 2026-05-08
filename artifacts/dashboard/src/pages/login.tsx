@@ -1,15 +1,14 @@
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useLogin } from "@workspace/api-client-react";
 import { useAuth } from "@/hooks/use-auth";
+import { supabase } from "@/lib/supabase";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import { toast } from "sonner";
-import { Spinner } from "@/components/ui/spinner";
 
 const loginSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -20,7 +19,7 @@ type LoginFormValues = z.infer<typeof loginSchema>;
 
 export default function LoginPage() {
   const { login: authenticate } = useAuth();
-  const login = useLogin();
+  const [, setLocation] = useLocation();
   
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
@@ -30,16 +29,31 @@ export default function LoginPage() {
     },
   });
 
-  const onSubmit = (values: LoginFormValues) => {
-    login.mutate({ data: values }, {
-      onSuccess: (data) => {
-        toast.success("Logged in successfully");
-        authenticate(data.token);
-      },
-      onError: (error) => {
-        toast.error(error.message || "Failed to login");
+  const onSubmit = async (values: LoginFormValues) => {
+    console.info("[login] Submitting login request", { email: values.email });
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: values.email,
+        password: values.password,
+      });
+
+      if (error) {
+        console.error("[login] Login failed", error);
+        toast.error(error.message || "No se pudo iniciar sesion");
+        return;
       }
-    });
+
+      console.info("[login] Login succeeded", {
+        userId: data.user?.id ?? null,
+        email: data.user?.email ?? null,
+      });
+      toast.success("Inicio de sesion correcto");
+      authenticate(data.session ?? null);
+      setLocation("/");
+    } catch (error) {
+      console.error("[login] Unexpected login error", error);
+      toast.error("Ocurrio un error inesperado al iniciar sesion");
+    }
   };
 
   return (
@@ -78,9 +92,8 @@ export default function LoginPage() {
                   </FormItem>
                 )}
               />
-              <Button type="submit" className="w-full" disabled={login.isPending} data-testid="btn-login-submit">
-                {login.isPending ? <Spinner className="mr-2 h-4 w-4" /> : null}
-                Sign in
+              <Button type="submit" className="w-full" disabled={form.formState.isSubmitting} data-testid="btn-login-submit">
+                {form.formState.isSubmitting ? "Entrando..." : "Sign in"}
               </Button>
             </form>
           </Form>

@@ -50,3 +50,10 @@ Thumbs.db
 
 # Local env files
 .env
+
+
+node_modules/
+.env
+.next/
+dist/
+build/

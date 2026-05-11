@@ -3,6 +3,7 @@ import { setAuthTokenGetter } from "@workspace/api-client-react";
 import { useLocation } from "wouter";
 import type { Session, User } from "@supabase/supabase-js";
 import { supabase } from "@/lib/supabase";
+import { getDefaultRouteForRole } from "@/lib/role-routing";
 
 type AuthUser = {
   id: string;
@@ -72,9 +73,10 @@ export function useAuth() {
   }, []);
 
   const handleLogin = (nextSession: Session | null) => {
+    const nextUser = mapSupabaseUser(nextSession?.user ?? null);
     setSession(nextSession);
-    setUser(mapSupabaseUser(nextSession?.user ?? null));
-    setLocation("/");
+    setUser(nextUser);
+    setLocation(getDefaultRouteForRole(nextUser?.role));
   };
 
   const handleLogout = async () => {

@@ -16,6 +16,7 @@ import LoginPage from "@/pages/login";
 import RegisterPage from "@/pages/register";
 import { AppLayout } from "@/components/layout/app-layout";
 import { Spinner } from "@/components/ui/spinner";
+import { canAccessRoute, getDefaultRouteForRole } from "@/lib/role-routing";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -26,8 +27,8 @@ const queryClient = new QueryClient({
   }
 });
 
-function ProtectedRoute({ component: Component, ...rest }: any) {
-  const { isAuthenticated, isLoading } = useAuth();
+function ProtectedRoute({ component: Component, path, ...rest }: any) {
+  const { isAuthenticated, isLoading, user } = useAuth();
   
   if (isLoading) {
     return <div className="h-screen w-full flex items-center justify-center"><Spinner className="w-8 h-8" /></div>;
@@ -35,6 +36,11 @@ function ProtectedRoute({ component: Component, ...rest }: any) {
   
   if (!isAuthenticated) {
     window.location.href = "/login";
+    return null;
+  }
+
+  if (path && !canAccessRoute(user?.role, path)) {
+    window.location.href = getDefaultRouteForRole(user?.role);
     return null;
   }
   
@@ -56,12 +62,12 @@ function Router() {
       <Route path="/" nest>
         <AppLayout>
           <Switch>
-            <Route path="/" component={() => <ProtectedRoute component={DashboardPage} />} />
-            <Route path="/users" component={() => <ProtectedRoute component={UsersPage} />} />
-            <Route path="/products" component={() => <ProtectedRoute component={ProductsPage} />} />
-            <Route path="/customers" component={() => <ProtectedRoute component={CustomersPage} />} />
-            <Route path="/posts" component={() => <ProtectedRoute component={PostsPage} />} />
-            <Route path="/settings" component={() => <ProtectedRoute component={SettingsPage} />} />
+            <Route path="/" component={() => <ProtectedRoute component={DashboardPage} path="/" />} />
+            <Route path="/users" component={() => <ProtectedRoute component={UsersPage} path="/users" />} />
+            <Route path="/products" component={() => <ProtectedRoute component={ProductsPage} path="/products" />} />
+            <Route path="/customers" component={() => <ProtectedRoute component={CustomersPage} path="/customers" />} />
+            <Route path="/posts" component={() => <ProtectedRoute component={PostsPage} path="/posts" />} />
+            <Route path="/settings" component={() => <ProtectedRoute component={SettingsPage} path="/settings" />} />
             <Route component={NotFound} />
           </Switch>
         </AppLayout>

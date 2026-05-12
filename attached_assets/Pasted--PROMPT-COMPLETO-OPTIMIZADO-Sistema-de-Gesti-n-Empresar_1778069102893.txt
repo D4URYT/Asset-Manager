@@ -1,0 +1,191 @@
+🚀 PROMPT COMPLETO OPTIMIZADO
+Sistema de Gestión Empresarial Web (Node.js + Dashboard + Testing)
+
+Desarrollar un portal web de gestión empresarial moderno, escalable y totalmente testeable, utilizando Node.js como tecnología principal en el backend. El sistema debe permitir la administración de información mediante operaciones CRUD, ofrecer una experiencia de usuario profesional tipo dashboard empresarial y estar preparado para pruebas automatizadas (testing).
+
+🎯 OBJETIVO
+
+Construir una aplicación web dinámica que:
+
+Permita gestionar entidades empresariales (usuarios, productos, clientes o publicaciones)
+Implemente operaciones CRUD completas
+Ofrezca una interfaz moderna tipo dashboard profesional
+Sea completamente responsiva
+Siga buenas prácticas de desarrollo
+Esté preparada para testing (unitario, integración y E2E)
+🧱 TECNOLOGÍAS
+Backend
+Node.js
+Express.js
+Arquitectura MVC + Servicios + Repositorios
+Frontend
+HTML5, CSS3, JavaScript
+Framework opcional: React
+Base de Datos
+SQL (MySQL o PostgreSQL)
+🧠 ARQUITECTURA (PREPARADA PARA TESTING)
+
+Estructura desacoplada:
+
+/backend
+  /controllers
+  /services
+  /repositories
+  /routes
+  /middlewares
+  /utils
+  /tests
+/frontend
+  /components
+  /pages
+  /tests
+
+Separación de responsabilidades:
+
+Controllers → manejo HTTP
+Services → lógica de negocio
+Repositories → acceso a datos
+🎨 DISEÑO Y UX/UI
+
+El sistema debe cumplir con:
+
+Diseño moderno, limpio y profesional
+Navegación intuitiva
+Uso consistente de colores, tipografía y espaciado
+Accesibilidad básica (contraste, labels, estructura clara)
+📱 DISEÑO RESPONSIVO
+
+Adaptable a:
+
+Computadoras
+Tablets
+Dispositivos móviles
+
+Uso de:
+
+Media Queries
+Bootstrap o Tailwind
+🧩 DISEÑO TIPO DASHBOARD EMPRESARIAL
+Layout principal:
+Sidebar (menú lateral colapsable)
+Header (topbar con búsqueda, notificaciones y perfil)
+Main content (contenido dinámico)
+Sidebar incluye:
+Dashboard
+Usuarios
+Productos / Servicios
+Reportes
+Publicaciones
+Mensajes
+Configuración
+Cerrar sesión
+Header incluye:
+Barra de búsqueda
+Notificaciones con contador
+Perfil de usuario
+Botón de modo oscuro
+Dashboard (Home)
+Tarjetas KPI:
+Usuarios
+Ventas
+Productos
+Ingresos
+Gráficas:
+Ventas mensuales
+Usuarios activos
+Distribución de datos
+Tabla:
+Actividad reciente
+Módulo CRUD
+
+Funcionalidades:
+
+Crear registros
+Listar datos
+Editar
+Eliminar
+
+Incluye:
+
+Tabla con acciones
+Buscador y filtros
+Formularios en modal
+Autenticación
+Login
+Registro
+Manejo de sesiones
+Protección de rutas
+Otras páginas
+Home
+Contenido (blog, productos o noticias)
+Contacto
+🖼️ CONTENIDO MULTIMEDIA
+Imágenes optimizadas
+Video embebido
+
+Requisito:
+
+Si no hay video propio, crear uno, subirlo a redes sociales y enlazarlo
+🌐 REDES SOCIALES
+Enlaces en el footer
+Íconos visibles
+Redirección funcional
+Contenido publicado relacionado al proyecto
+🧼 CALIDAD Y BUENAS PRÁCTICAS
+Código modular y organizado
+Comentarios claros
+Validación de formularios
+Manejo de errores
+Seguridad básica:
+Hash de contraseñas
+Protección de rutas
+🧪 TESTING (REQUISITO CLAVE)
+
+El sistema debe estar completamente preparado para pruebas:
+
+Tipos de testing
+Unit Testing
+Servicios y lógica de negocio
+Integration Testing
+Endpoints API
+End-to-End Testing
+Flujos completos de usuario
+Herramientas
+Backend
+Jest
+Supertest
+Frontend
+Testing Library
+Cypress o Playwright
+Buenas prácticas de testing
+Uso de mocks para evitar dependencia de la base de datos
+Validación de errores
+Cobertura mínima del 80%
+Tests organizados por módulos
+Ejemplos a cubrir
+CRUD completo
+Login y autenticación
+Validaciones
+Rutas protegidas
+🔐 SEGURIDAD
+Validación de inputs
+Protección contra errores comunes
+Control de acceso por roles (opcional)
+🚀 EXTRAS OPCIONALES (RECOMENDADO)
+API REST completa
+Animaciones con CSS/JS
+Notificaciones en tiempo real (Socket.IO)
+Dashboard dinámico
+Modo oscuro persistente
+CI/CD con pruebas automáticas
+Docker
+📦 RESULTADO ESPERADO
+
+Un sistema web de gestión empresarial que:
+
+Sea funcional, moderno y responsivo
+Permita gestión eficiente de datos
+Tenga interfaz tipo dashboard profesional
+Esté completamente preparado para testing
+Sea escalable y mantenible
+Esté listo para producción o expansión

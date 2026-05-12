@@ -32,7 +32,7 @@ export function AppLayout({ children }: { children: ReactNode }) {
   return (
     <SidebarProvider>
       <div className="flex min-h-screen w-full bg-muted/30">
-        <Sidebar variant="inset">
+        <Sidebar variant="inset" data-testid="sidebar">
           <SidebarHeader className="h-16 flex items-center justify-center border-b px-4">
             <div className="flex items-center gap-2 font-bold text-lg w-full">
               <div className="size-8 rounded bg-primary text-primary-foreground flex items-center justify-center">
@@ -83,7 +83,7 @@ export function AppLayout({ children }: { children: ReactNode }) {
         <div className="flex-1 flex flex-col min-w-0">
           <header className="h-16 flex items-center justify-between border-b bg-background px-4 md:px-6 sticky top-0 z-10">
             <div className="flex items-center gap-4 flex-1">
-              <SidebarTrigger className="md:hidden" />
+              <SidebarTrigger className="md:hidden" data-testid="mobile-menu-toggle" />
               <div className="relative max-w-md w-full hidden md:block">
                 <Search className="absolute left-2.5 top-2.5 size-4 text-muted-foreground" />
                 <Input 

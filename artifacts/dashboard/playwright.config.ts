@@ -1,6 +1,7 @@
 import { defineConfig, devices } from "@playwright/test";
 
-const BASE_URL = process.env.PLAYWRIGHT_BASE_URL ?? "http://localhost:80";
+const PORT = process.env.PLAYWRIGHT_PORT ?? "4173";
+const BASE_URL = process.env.PLAYWRIGHT_BASE_URL ?? `http://127.0.0.1:${PORT}`;
 
 export default defineConfig({
   testDir: "./e2e",
@@ -15,10 +16,6 @@ export default defineConfig({
     trace: "on-first-retry",
     screenshot: "only-on-failure",
     video: "on-first-retry",
-    launchOptions: {
-      executablePath: process.env.CHROMIUM_PATH ?? "/home/runner/.nix-profile/bin/chromium",
-      args: ["--no-sandbox", "--disable-setuid-sandbox", "--disable-dev-shm-usage"],
-    },
   },
 
   projects: [
@@ -27,4 +24,11 @@ export default defineConfig({
       use: { ...devices["Desktop Chrome"] },
     },
   ],
+
+  webServer: {
+    command: `powershell -Command "$env:PORT='${PORT}'; $env:BASE_PATH='/'; npm run dev -- --port ${PORT}"`,
+    url: BASE_URL,
+    reuseExistingServer: !process.env.CI,
+    timeout: 120 * 1000,
+  },
 });

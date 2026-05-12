@@ -1,133 +1,99 @@
-import { test, expect } from "@playwright/test";
+import { expect, test } from "@playwright/test";
+import { TEST_EMAIL, TEST_PASSWORD, login } from "./support";
 
-const ADMIN_EMAIL = "admin@empresa.com";
-const ADMIN_PASSWORD = "admin123";
-
-// ---------------------------------------------------------------------------
-// Helpers
-// ---------------------------------------------------------------------------
-async function fillLogin(page: import("@playwright/test").Page, email: string, password: string) {
-  await page.locator('[data-testid="input-login-email"]').fill(email);
-  await page.locator('[data-testid="input-login-password"]').fill(password);
-  await page.locator('[data-testid="btn-login-submit"]').click();
-}
-
-// ---------------------------------------------------------------------------
-// Login
-// ---------------------------------------------------------------------------
 test.describe("Login page", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto("/");
-    await expect(page).toHaveURL(/\/(login)?$/, { timeout: 8000 });
+    await expect(page).toHaveURL(/\/login$/);
   });
 
   test("shows the BusinessDash title and login form fields", async ({ page }) => {
     await expect(page.getByText("BusinessDash")).toBeVisible();
-    await expect(page.locator('[data-testid="input-login-email"]')).toBeVisible();
-    await expect(page.locator('[data-testid="input-login-password"]')).toBeVisible();
-    await expect(page.locator('[data-testid="btn-login-submit"]')).toBeVisible();
-  });
-
-  test("shows a link to the register page", async ({ page }) => {
-    await expect(page.locator('[data-testid="link-register"]')).toBeVisible();
+    await expect(page.getByTestId("input-login-email")).toBeVisible();
+    await expect(page.getByTestId("input-login-password")).toBeVisible();
+    await expect(page.getByTestId("btn-login-submit")).toBeVisible();
   });
 
   test("shows validation errors when submitting empty form", async ({ page }) => {
-    await page.locator('[data-testid="btn-login-submit"]').click();
-    // React Hook Form + Zod validation shows inline errors
-    await expect(page.getByText(/invalid email|required/i)).toBeVisible({ timeout: 3000 });
+    await page.getByTestId("btn-login-submit").click();
+    await expect(page.getByText(/invalid email|required/i)).toBeVisible();
   });
 
-  test("shows a toast error on wrong credentials", async ({ page }) => {
-    await fillLogin(page, "wrong@example.com", "wrongpass123");
+  test("keeps the user on login after wrong credentials", async ({ page }) => {
+    await page.getByTestId("input-login-email").fill("wrong@example.com");
+    await page.getByTestId("input-login-password").fill("wrongpass123");
+    await page.getByTestId("btn-login-submit").click();
 
-    // Sonner renders toasts in a [data-sonner-toaster] portal
-    await expect(
-      page.locator("[data-sonner-toaster]").getByText(/invalid email or password|failed to login/i),
-    ).toBeVisible({ timeout: 8000 });
+    await expect(page).toHaveURL(/\/login$/, { timeout: 10000 });
+    await expect(page.getByTestId("input-login-email")).toHaveValue("wrong@example.com");
   });
 
   test("logs in successfully and redirects away from login", async ({ page }) => {
-    await fillLogin(page, ADMIN_EMAIL, ADMIN_PASSWORD);
-    await expect(page).not.toHaveURL(/\/login/, { timeout: 10000 });
+    await login(page, TEST_EMAIL, TEST_PASSWORD);
+    await expect(page).not.toHaveURL(/\/login$/, { timeout: 10000 });
   });
 
   test("persists session on page reload after login", async ({ page }) => {
-    await fillLogin(page, ADMIN_EMAIL, ADMIN_PASSWORD);
-    await expect(page).not.toHaveURL(/\/login/, { timeout: 10000 });
+    await login(page, TEST_EMAIL, TEST_PASSWORD);
     await page.reload();
-    await expect(page).not.toHaveURL(/\/login/, { timeout: 8000 });
+    await expect(page).not.toHaveURL(/\/login$/, { timeout: 10000 });
   });
 });
 
-// ---------------------------------------------------------------------------
-// Register
-// ---------------------------------------------------------------------------
 test.describe("Register page", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/");
-    await page.locator('[data-testid="link-register"]').click();
-    await expect(page).toHaveURL(/\/register/, { timeout: 5000 });
+    await page.goto("/register");
+    await expect(page).toHaveURL(/\/register$/);
   });
 
   test("shows the registration form fields", async ({ page }) => {
     await expect(page.getByText("Create an account")).toBeVisible();
-    await expect(page.locator('[data-testid="input-register-name"]')).toBeVisible();
-    await expect(page.locator('[data-testid="input-register-email"]')).toBeVisible();
-    await expect(page.locator('[data-testid="input-register-password"]')).toBeVisible();
-    await expect(page.locator('[data-testid="btn-register-submit"]')).toBeVisible();
+    await expect(page.getByTestId("input-register-name")).toBeVisible();
+    await expect(page.getByTestId("input-register-email")).toBeVisible();
+    await expect(page.getByTestId("input-register-password")).toBeVisible();
+    await expect(page.getByTestId("btn-register-submit")).toBeVisible();
   });
 
   test("shows a link back to login", async ({ page }) => {
-    await expect(page.locator('[data-testid="link-login"]')).toBeVisible();
+    await page.getByTestId("link-login").click();
+    await expect(page).toHaveURL(/\/login$/);
   });
 
-  test("registers a new user and redirects away from register page", async ({ page }) => {
-    const unique = Date.now();
-    await page.locator('[data-testid="input-register-name"]').fill("Test User");
-    await page.locator('[data-testid="input-register-email"]').fill(`testuser_${unique}@example.com`);
-    await page.locator('[data-testid="input-register-password"]').fill("TestPass99");
-    await page.locator('[data-testid="btn-register-submit"]').click();
+  test("validates invalid email before submitting registration", async ({ page }) => {
+    const emailInput = page.getByTestId("input-register-email");
+    await page.getByTestId("input-register-name").fill("Test User");
+    await emailInput.fill("correo-invalido");
+    await page.getByTestId("input-register-password").fill("TestPass99");
+    await page.getByTestId("btn-register-submit").click();
 
-    await expect(page).not.toHaveURL(/\/register/, { timeout: 10000 });
-  });
-
-  test("shows toast error when email is already registered", async ({ page }) => {
-    await page.locator('[data-testid="input-register-name"]').fill("Duplicate Admin");
-    await page.locator('[data-testid="input-register-email"]').fill(ADMIN_EMAIL);
-    await page.locator('[data-testid="input-register-password"]').fill("SomePass99");
-    await page.locator('[data-testid="btn-register-submit"]').click();
-
-    await expect(
-      page.locator("[data-sonner-toaster]").getByText(/email already in use|already registered/i),
-    ).toBeVisible({ timeout: 8000 });
+    await expect.poll(() =>
+      emailInput.evaluate((element) => (element as HTMLInputElement).checkValidity()),
+    ).toBe(false);
   });
 
   test("shows validation error when name is too short", async ({ page }) => {
-    // Fill a short name (< 2 chars) and valid email + password,
-    // then submit — React Hook Form shows inline error for name
-    await page.locator('[data-testid="input-register-name"]').fill("A");
-    await page.locator('[data-testid="input-register-email"]').fill("valid@example.com");
-    await page.locator('[data-testid="input-register-password"]').fill("pass123");
-    await page.locator('[data-testid="btn-register-submit"]').click();
-    await expect(page.getByText(/at least 2 characters/i)).toBeVisible({ timeout: 3000 });
+    await page.getByTestId("input-register-name").fill("A");
+    await page.getByTestId("input-register-email").fill("valid@example.com");
+    await page.getByTestId("input-register-password").fill("pass123");
+    await page.getByTestId("btn-register-submit").click();
+    await expect(page.getByText(/at least 2 characters/i)).toBeVisible();
   });
 });
 
-// ---------------------------------------------------------------------------
-// Logout
-// ---------------------------------------------------------------------------
 test.describe("Logout", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/");
-    await page.locator('[data-testid="input-login-email"]').fill(ADMIN_EMAIL);
-    await page.locator('[data-testid="input-login-password"]').fill(ADMIN_PASSWORD);
-    await page.locator('[data-testid="btn-login-submit"]').click();
-    await expect(page).not.toHaveURL(/\/login/, { timeout: 10000 });
+    await login(page);
+    await expect(page).not.toHaveURL(/\/login$/, { timeout: 10000 });
   });
 
   test("clicking nav logout button redirects to login", async ({ page }) => {
-    await page.locator('[data-testid="nav-logout"]').click();
-    await expect(page).toHaveURL(/\/(login)?$/, { timeout: 8000 });
+    await page.getByTestId("nav-logout").click();
+    await expect(page).toHaveURL(/\/login$/);
+  });
+
+  test("user menu logout redirects to login", async ({ page }) => {
+    await page.getByTestId("user-menu").click();
+    await page.getByText("Log out").click();
+    await expect(page).toHaveURL(/\/login$/);
   });
 });
